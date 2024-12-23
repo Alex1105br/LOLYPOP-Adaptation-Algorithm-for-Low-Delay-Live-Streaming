@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  player:
+    build: .
+    container_name: player
+    volumes:
+      - ./results:/app/results
+      - ./traces:/app/traces
+      - ./envivio:/app/envivio
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: python ./src/player_v2.py
+
+  plotter:
+    build: .
+    container_name: plotter
+    depends_on:
+      - player
+    volumes:
+      - ./results:/app/results
+      - ./graphs:/app/graphs
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: python ./src/plot_logs.py
